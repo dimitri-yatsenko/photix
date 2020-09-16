@@ -3,6 +3,9 @@ import setuptools
 with open("README.md") as f:
     long_description = f.read()
 
+with open('requirements.txt') as f:
+    requirements = f.read().split()
+
 setuptools.setup(
     name="photix", 
     version="0.0.1",
@@ -12,6 +15,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/dimitri-yatsenko/photix",
+	install_requires=requirements,
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
