@@ -4,7 +4,7 @@ from scipy import spatial
 from . import design
 from . tracer import ETracer
 
-schema = dj.schema('photix_sim')
+schema = dj.schema('photix')
 
 
 @schema
@@ -50,56 +50,3 @@ class Tissue(dj.Computed):
             points=points,
             volume=spatial.ConvexHull(points).volume * 1e-9,
             inner_count=inner.sum()))
-
-
-@schema
-class Detection(dj.Computed):
-    definition = """
-    -> Tissue
-    -> design.Geometry.DPixel
-    ---
-    detection  : longblob  # probability per cell
-    photon_count  :  int unsigned
-    """
-
-
-@schema
-class Emission(dj.Computed):
-    definition = """
-    -> Tissue
-    -> design.Geometry.EPixel
-    ---
-    flux  : longblob  # dims = points x steers probability flux per um^2
-    photon_count  :  int unsigned
-    """
-
-    def make(self, key):
-        # rotate points into the EPixel's coordinate system: z-axis = normal
-        config = (design.Design & key).fetch1()
-
-        loc, norm = (design.Geometry.EPixel & key).fetch1('e_loc', 'e_norm')
-        z_basis = np.pad(norm, (0, 1))
-        y_basis = np.array([0, 0, 1])
-        basis = np.stack((np.cross(z_basis, y_basis), y_basis, z_basis))
-        assert np.allclose(basis @ basis.T, np.eye(3))
-        points = ((Tissue & key).fetch1('points') - loc.astype('float32')) @ basis
-
-        steer = 0.0
-        beam_compression = 1.0
-        beam_xy_aspect = 1.0
-
-        tracer = ETracer(
-            emitter_shape="rect",
-            emitter_size=(float(config['epixel_width']), float(config['epixel_width']), 0),
-            emitter_profile=config['epixel_profile'],
-            detector_positions=points,
-            anisotropy=config['anisotropy'],
-            absorption_length=config['absorption_length'],
-            scatter_length=config['scatter_length'],
-            y_steer=steer,
-            beam_compression=beam_compression,
-            beam_xy_aspect=beam_xy_aspect,
-            max_hop=20.0)
-
-        tracer.run(500, display_progress=False)
-        self.insert1(dict(key, flux=tracer.flux, photon_count=tracer.photon_count))

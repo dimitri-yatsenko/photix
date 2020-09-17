@@ -1,3 +1,3 @@
-from photics import design
+from photix import design
 
-design.populate(Geometry)
+design.Geometry.populate()
