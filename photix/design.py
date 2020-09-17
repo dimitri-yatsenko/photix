@@ -171,9 +171,9 @@ class Geometry(dj.Computed):
         self.insert1(dict(key,
                           shanks_xy=np.array(shanks_xy),
                           n_shanks=len(shanks_xy)))
-
         ecount = itertools.count()
         dcount = itertools.count()
+
         for xy in tqdm.tqdm(shanks_xy):
             # EPixels
             azimuths = np.arange(*[float(x)

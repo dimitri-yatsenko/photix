@@ -52,6 +52,20 @@ class Tissue(dj.Computed):
 
 
 @schema
+class InnerPoints(dj.Computed):
+    definition = """
+    -> Tissue
+    ---
+    inner : longblob  # boolean index of points that are inside the probe
+    """
+
+    def make(self, key):
+        xyz = np.stack((design.Geometry.EPixel() & key).fetch('e_loc'))
+        points = (design.Tissue & key).fetch1('points')
+        self.insert1(dict(key, inner=(spatial.Delaunay(xyz).find_simplex(points)) != -1))
+
+
+@schema
 class Fluorescence(dj.Computed):
     definition = """
     -> Tissue
