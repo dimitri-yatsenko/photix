@@ -165,6 +165,6 @@ class SpikeSNR(dj.Computed):
         tau = 1.0
         dt = 0.02  # must match the one in Demix
         demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
-        rho = np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum()  # SNR improvement by matched filter
+        rho = np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum())  # SNR improvement by matched filter
         snr = (bias < max_bias) * rho * delta / demix_norm
         self.insert1(dict(key, snr=snr, delta=delta))
