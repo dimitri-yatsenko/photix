@@ -1,8 +1,7 @@
-import datajoint as dj
-import numpy as np
 from scipy import spatial
 from . import design
-from . tracer import ETracer
+from .design import *
+from .fields import *
 
 schema = dj.schema('photix')
 
@@ -50,3 +49,48 @@ class Tissue(dj.Computed):
             points=points,
             volume=spatial.ConvexHull(points).volume * 1e-9,
             inner_count=inner.sum()))
+
+
+@schema
+class Fluorescence(dj.Computed):
+    definition = """
+    -> Tissue
+    """
+
+    class EPixel(dj.Part):
+        definition = """
+        # Fluorescence produced by cells per Joule of illumination
+        -> master
+        -> Geometry.EField
+        ---
+        photons_per_cell  : longblob   # photons emitted from cells per joule of illumination
+        total_photons : float  # total photons from all cells
+        """
+
+    def make(self, key):
+        neuron_cross_section = 1e-4  # um^2
+        photons_per_joule = 1 / (2.8 * 1.6e-19)  # 2.8 eV blue photons
+        points = (Tissue & key).fetch1('points')
+        self.insert1(key)
+        for esim_key in (EField() & (Geometry.EField & key)).fetch("KEY"):
+            volume, pitch, *dims = (ESim * EField & esim_key).fetch1(
+                'volume', 'pitch', 'volume_dimx', 'volume_dimy', 'volume_dimz')
+            dims = np.array(dims)
+            for k in tqdm.tqdm((Geometry.EField & key & esim_key).fetch('KEY')):
+                # cell positions in volume coordinates
+                e_xyz, basis_z = (Geometry.EPixel & k).fetch1('e_loc', 'e_norm')
+                basis_y = np.array([0, 0, 1])
+                basis_z = np.append(basis_z, 0)
+                basis = np.stack((np.cross(basis_y, basis_z), basis_y, basis_z)).T
+                assert np.allclose(basis.T @ basis, np.eye(3)), "incorrect epixel orientation"
+                vxyz = np.int16(np.round((points - e_xyz) @ basis / pitch + dims / 2))
+                # photon counts
+                v = neuron_cross_section * photons_per_joule * np.array([
+                    volume[q[0], q[1], q[2]] if
+                    0 <= q[0] < dims[0] and
+                    0 <= q[1] < dims[1] and
+                    0 <= q[2] < dims[2] else 0 for q in vxyz])
+                self.EPixel().insert1(
+                    dict(k, **esim_key,
+                         photons_per_cell=np.float32(v),
+                         total_photons=v.sum()))
