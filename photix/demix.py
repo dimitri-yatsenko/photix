@@ -95,6 +95,8 @@ class Demix(dj.Computed):
 
         emission = np.stack(
             [x[selection] for x in (Fluorescence.EPixel & key).fetch('photons_per_cell')])  # emitters x sources
+        emission = dt * illumination @ emission  # photons per frame
+
         detection = np.stack(
             [x[selection] for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # detectors x sources
 
