@@ -3,6 +3,7 @@ import datajoint as dj
 from . import fields
 import itertools
 import json
+import tqdm
 
 schema = dj.schema('photix')
 
@@ -173,7 +174,7 @@ class Geometry(dj.Computed):
 
         ecount = itertools.count()
         dcount = itertools.count()
-        for xy in shanks_xy:
+        for xy in tqdm.tqdm(shanks_xy):
             # EPixels
             azimuths = np.arange(*[float(x)
                                    for x in design['epixel_azimuths'].split(':')])
