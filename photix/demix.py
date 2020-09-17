@@ -133,3 +133,38 @@ class Demix(dj.Computed):
             demix_norm=np.linalg.norm(demix, axis=1),
             bias_norm=np.linalg.norm(bias, axis=1),
             trans_bias_norm=np.linalg.norm(bias, axis=0)))
+
+
+@schema
+class Cosine(dj.Computed):
+    definition = """
+    -> Demix
+    ---
+    cosines : longblob
+    """
+
+    def make(self, key):
+        max_bias = 0.01
+        mix_norm, demix_norm, bias_norm = (Demix & key).fetch1('mix_norm', 'demix_norm', 'bias_norm')
+        cosines = (bias_norm < max_bias) / (mix_norm * demix_norm)
+        self.insert1(dict(key, cosines=cosines))
+
+
+@schema
+class SpikeSNR(dj.Computed):
+    definition = """
+    -> Demix
+    ---
+    snr : longblob
+    delta : float
+    """
+
+    def make(self, key):
+        max_bias = 0.01
+        delta = 0.03 * 0.4
+        tau = 1.0
+        dt = 0.02  # must match the one in Demix
+        demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
+        rho = np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum()  # SNR improvement by matched filter
+        snr = (bias < max_bias) * rho * delta / demix_norm
+        self.insert1(dict(key, snr=snr, delta=delta))
