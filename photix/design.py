@@ -195,6 +195,6 @@ class Geometry(dj.Computed):
             pos = np.vstack([np.array([[xy[0], xy[1], d]] * int(group)) for d in depths])
             norm = np.stack((np.cos(azimuths / 180 * np.pi), np.sin(azimuths / 180 * np.pi))).T
             assert pos.shape[0] == norm.shape[0], "Invalid emitter positions specification"
-            self.DPixel().insert(
-                dict(key, dpixel=c, d_loc=p, d_norm=n)
-                for c, p, n in zip(dcount, pos, norm))
+            for c, p, n in zip(dcount, pos, norm):
+                self.DPixel().insert1(dict(key, dpixel=c, d_loc=p, d_norm=n))
+                self.DField().insert(dict(key, dpixel=c, d_sim=dsim))
