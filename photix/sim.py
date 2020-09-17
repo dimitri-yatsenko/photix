@@ -94,3 +94,48 @@ class Fluorescence(dj.Computed):
                     dict(k, **esim_key,
                          photons_per_cell=np.float32(v),
                          total_photons=v.sum()))
+
+
+@schema
+class Detection(dj.Computed):
+    definition = """
+    -> Tissue
+    """
+
+    class DPixel(dj.Part):
+        definition = """
+        # Fraction of photons detected from each cell per detector
+        -> master
+        -> Geometry.DField
+        ---
+        detect_probabilities  : longblob   # fraction of photons detected from each neuron
+        mean_probability : float  # mean probability of detection across all neurons
+        """
+
+    def make(self, key):
+        points = (Tissue & key).fetch1('points')
+        self.insert1(key)
+        for dsim_key in (DSim & (Geometry.DField & key)).fetch("KEY"):
+            volume, pitch, *dims = (DSim * DField & dsim_key).fetch1(
+                'volume', 'pitch', 'volume_dimx', 'volume_dimy', 'volume_dimz')
+            # just in case, normalize. Max detection should already be approximately 0.5.
+            # Remove normalization after additional sim verifications
+            volume = 0.5 * volume / volume.max()
+            dims = np.array(dims)
+            for k in tqdm.tqdm((Geometry.DField & key & dsim_key).fetch('KEY')):
+                # cell positions in volume coordinates
+                d_xyz, basis_z = (Geometry.DPixel & k).fetch1('d_loc', 'd_norm')
+                basis_y = np.array([0, 0, 1])
+                basis_z = np.append(basis_z, 0)
+                basis = np.stack((np.cross(basis_y, basis_z), basis_y, basis_z)).T
+                assert np.allclose(basis.T @ basis, np.eye(3)), "incorrect dpixel orientation"
+                vxyz = np.int16(np.round((points - d_xyz) @ basis / pitch + dims / 2))
+
+                # sample DSim volume
+                v = np.array([
+                    volume[q[0], q[1], q[2]] if
+                    0 <= q[0] < dims[0] and
+                    0 <= q[1] < dims[1] and
+                    0 <= q[2] < dims[2] else 0 for q in vxyz])
+                self.DPixel().insert1(
+                    dict(k, detect_probabilities=np.float32(v), mean_probability=v.sum()))
