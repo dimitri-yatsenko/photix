@@ -135,12 +135,6 @@ class Geometry(dj.Computed):
         e_norm : longblob   # x, y  unit vector 
         """
 
-    class EField(dj.Part):
-        definition = """
-        -> master.Epixel
-        -> EField
-        """
-
     class DPixel(dj.Part):
         definition = """
         -> master
@@ -150,10 +144,17 @@ class Geometry(dj.Computed):
         d_norm : longblob   # x, y  unit vector 
         """
 
+    class EField(dj.Part):
+        definition = """
+        -> master.EPixel
+        -> fields.EField
+        """
+
     class DField(dj.Part):
         definition = """
-        -> master.Epixel
-        -> DField
+        -> master.DPixel
+        ---
+        -> fields.DField
         """
 
     def make(self, key):
@@ -162,11 +163,14 @@ class Geometry(dj.Computed):
         shanks_xy = Design.make_lattice(
             design['lattice'], design['lattice_rows']) * design['lattice_pitch']
         field_sims = json.loads(design['field_sims'])
-        fields
-
+        esims = field_sims['e']
+        dsim = field_sims['d']
+        assert fields.DField & {'dsim': dsim}
+        assert all((fields.EField & {'esim': esim} for esim in esims))
         self.insert1(dict(key,
                           shanks_xy=np.array(shanks_xy),
                           n_shanks=len(shanks_xy)))
+
         ecount = itertools.count()
         dcount = itertools.count()
         for xy in shanks_xy:
@@ -178,9 +182,9 @@ class Geometry(dj.Computed):
             pos = np.vstack([np.array([[xy[0], xy[1], d]] * int(group)) for d in depths])
             norm = np.stack((np.cos(azimuths / 180 * np.pi), np.sin(azimuths / 180 * np.pi))).T
             assert pos.shape[0] == norm.shape[0], "Invalid emitter positions specification"
-            self.EPixel().insert(
-                dict(key, epixel=c, e_loc=p, e_norm=n)
-                for c, p, n in zip(ecount, pos, norm))
+            for c, p, n in zip(ecount, pos, norm):
+                self.EPixel().insert1(dict(key, epixel=c, e_loc=p, e_norm=n))
+                self.EField().insert(dict(key, epixel=c, esim=esim) for esim in esims)
 
             # D pixels
             azimuths = np.arange(*[float(x)
