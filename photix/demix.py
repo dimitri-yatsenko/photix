@@ -4,7 +4,7 @@ import datajoint as dj
 import scipy
 from .sim import Fluorescence, Detection, Tissue
 
-schema = dj.schema('photonics')
+schema = dj.schema('photix')
 
 
 @schema
