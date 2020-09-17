@@ -197,4 +197,4 @@ class Geometry(dj.Computed):
             assert pos.shape[0] == norm.shape[0], "Invalid emitter positions specification"
             for c, p, n in zip(dcount, pos, norm):
                 self.DPixel().insert1(dict(key, dpixel=c, d_loc=p, d_norm=n))
-                self.DField().insert(dict(key, dpixel=c, d_sim=dsim))
+                self.DField().insert1(dict(key, dpixel=c, d_sim=dsim))
