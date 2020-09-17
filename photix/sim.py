@@ -61,7 +61,7 @@ class InnerPoints(dj.Computed):
 
     def make(self, key):
         xyz = np.stack((design.Geometry.EPixel() & key).fetch('e_loc'))
-        points = (design.Tissue & key).fetch1('points')
+        points = (Tissue & key).fetch1('points')
         self.insert1(dict(key, inner=(spatial.Delaunay(xyz).find_simplex(points)) != -1))
 
 
