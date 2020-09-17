@@ -1,6 +1,8 @@
 import numpy as np
 import datajoint as dj
+from . import fields
 import itertools
+import json
 
 schema = dj.schema('photix')
 
@@ -15,108 +17,90 @@ class Design(dj.Lookup):
     lattice : varchar(16)  # lattice type: sqdiag, hex
     lattice_rows : tinyint  
     lattice_pitch : float # um
-
     epixel_depths: varchar(200)   # (degrees) start:stop:step, group
     epixel_azimuths: varchar(200)   # (degrees) start:stop:step  
-    epixel_width: decimal(4,2)
-    epixel_height: decimal(4,2)
-    epixel_profile: varchar(300)   # emission field spec
-    epixel_steer_angles: varchar(300)  # (degrees) start:stop:step 
-
     dpixel_depths: varchar(200)   # (degrees) start:stop:step, group
     dpixel_azimuths: varchar(200)   # (degrees) start:stop:step
-    dpixel_width: decimal(4,2)   # (um) along x-axis
-    dpixel_height:  decimal(4,2)  # (um) along y-axis
-    dpixel_profile: varchar(300)  # detection field spec
-
-    anisotropy: float  # factor in the Henyey-Greenstein formula
-    absorption_length: float # (um)  average travel path before a absoprtion event 
-    scatter_length: float # (um) average travel path before a scatter event
-
-    detector_efficiency : float 
+    field_sims : varchar(200)  # json string specifying dfields and efields
     """
-
     contents = [
-
         dict(
             design=1,
             design_description="Shepherd/Roukes original",
-
             lattice='sqdiag',
             lattice_rows=7,
             lattice_pitch=200,
-
             epixel_depths="0:450:50,8",
             epixel_azimuths="0:3240:45",
-            epixel_width=10,
-            epixel_height=10,
-            epixel_profile="lambertian",
-            epixel_steer_angles="0",
-
             dpixel_depths="25:420:50,2",
             dpixel_azimuths="0:1440:90",
-            dpixel_width=10,
-            dpixel_height=50,
-            dpixel_profile="lambertian",
-
-            anisotropy=.88,
-            absorption_length=14000,
-            scatter_length=100,
-            detector_efficiency=0.65,
-        ),
+            field_sims='{"d": 0, "e": [0]}'),
         dict(
             design=2,
-            design_description="Hex-19 pitch 200",
-
+            design_description="Hex-19 pitch 200, steered",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=200,
-
             epixel_depths="0:1001:30,1",
             epixel_azimuths="22.5:4600:135",
-            epixel_width=10,
-            epixel_height=10,
-            epixel_profile="lambertian",
-            epixel_steer_angles="0",
-
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            dpixel_width=10,
-            dpixel_height=20,
-            dpixel_profile="lambertian",
-
-            anisotropy=.88,
-            absorption_length=14000,
-            scatter_length=100,
-            detector_efficiency=0.65,
-        ),
+            field_sims='{"d": 1, "e": [11, 12, 13, 14, 15, 16, 17]}'),
         dict(
-            design=3,
-            design_description="Hex-19 pitch 200 E-Pixels steered & narrowed",
-
+            design=4,
+            design_description="Hex-19 pitch 200, steered, cos^4",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=200,
-
             epixel_depths="0:1001:30,1",
             epixel_azimuths="22.5:4600:135",
-            epixel_width=10,
-            epixel_height=10,
-            epixel_profile="lambertian",
-            epixel_steer_angles="0",
-
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            dpixel_width=10,
-            dpixel_height=20,
-            dpixel_profile="lambertian",
-
-            anisotropy=.88,
-            absorption_length=14000,
-            scatter_length=100,
-            detector_efficiency=0.65,
-        )
-    ]
+            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}'),
+        dict(
+            design=5,
+            design_description="Hex-19 pitch 200, steered, cos^4",
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=200,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 4, "e": [21, 22, 23, 24, 25, 26, 27]}'),
+        dict(
+            design=8,
+            design_description="Hex-19 pitch 200, steered, cos^8",
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=200,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 8, "e": [11, 12, 13, 14, 15, 16, 17]}'),
+        dict(
+            design=10,
+            design_description="Hex-19 pitch 150, steered, cos^4",
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=150,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}'),
+        dict(
+            design=11,
+            design_description="Hex-37 pitch 120, steered, cos^4",
+            lattice='hex',
+            lattice_rows=7,
+            lattice_pitch=120,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}')]
 
     @staticmethod
     def make_lattice(lattice_type, nrows):
@@ -151,6 +135,12 @@ class Geometry(dj.Computed):
         e_norm : longblob   # x, y  unit vector 
         """
 
+    class EField(dj.Part):
+        definition = """
+        -> master.Epixel
+        -> EField
+        """
+
     class DPixel(dj.Part):
         definition = """
         -> master
@@ -160,11 +150,19 @@ class Geometry(dj.Computed):
         d_norm : longblob   # x, y  unit vector 
         """
 
+    class DField(dj.Part):
+        definition = """
+        -> master.Epixel
+        -> DField
+        """
+
     def make(self, key):
         design = (Design & key).fetch1()
 
         shanks_xy = Design.make_lattice(
             design['lattice'], design['lattice_rows']) * design['lattice_pitch']
+        field_sims = json.loads(design['field_sims'])
+        fields
 
         self.insert1(dict(key,
                           shanks_xy=np.array(shanks_xy),
@@ -183,6 +181,7 @@ class Geometry(dj.Computed):
             self.EPixel().insert(
                 dict(key, epixel=c, e_loc=p, e_norm=n)
                 for c, p, n in zip(ecount, pos, norm))
+
             # D pixels
             azimuths = np.arange(*[float(x)
                                    for x in design['dpixel_azimuths'].split(':')])

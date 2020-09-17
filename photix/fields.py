@@ -26,18 +26,12 @@ class DSim(dj.Lookup):
     """
 
     contents = [
-        dict(dsim=0, detector_type='one-sided', detector_height=50, scatter_length=100, absorption_length=14000,
-             dsim_description='100% Efficient Lambertian 10x50 rect'),
-        dict(dsim=1, detector_type='one-sided', detector_height=20, scatter_length=100, absorption_length=14000,
-             dsim_description='100% Efficient Lambertian 10x20 rect'),
-        dict(dsim=2, detector_type='narrowed2', detector_height=20, scatter_length=100, absorption_length=14000,
-             dsim_description="Narrow selective as 2th power of cosine, 10x20 rect"),
-        dict(dsim=4, detector_type='narrowed4', detector_height=20, scatter_length=100, absorption_length=14000,
-             dsim_description="Narrow selective as 4th power of cosine, 10x20 rect"),
-        dict(dsim=8, detector_type='narrowed8', detector_height=20, scatter_length=100, absorption_length=14000,
-             dsim_description="Narrow selective as 8th power of cosine, 10x20 rect"),
-        dict(dsim=14, detector_type='narrowed8', detector_height=20, scatter_length=48, absorption_length=16000,
-             dsim_description="same as 8 but more scatter")]
+        dict(dsim=0, detector_type='one-sided', detector_height=50, scatter_length=100, absorption_length=14000, dsim_description='100% Efficient Lambertian 10x50 rect'),
+        dict(dsim=1, detector_type='one-sided', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description='100% Efficient Lambertian 10x20 rect'),
+        dict(dsim=2, detector_type='narrowed2', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description="Narrow selective as 2th power of cosine, 10x20 rect"),
+        dict(dsim=4, detector_type='narrowed4', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description="Narrow selective as 4th power of cosine, 10x20 rect"),
+        dict(dsim=8, detector_type='narrowed8', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description="Narrow selective as 8th power of cosine, 10x20 rect"),
+        dict(dsim=14, detector_type='narrowed8', detector_height=20, scatter_length=48, absorption_length=16000, dsim_description="same as 8 but more scatter")]
 
 
 @schema
@@ -63,7 +57,7 @@ class DField(dj.Computed):
             emitter_size=(float(spec['detector_width']), float(spec['detector_height']), 0))
 
         space = SpaceTracer(**kwargs)
-        space.run(hops=500_000)
+        space.run(hops=100_000)
         volume = space.volume * space.emitter_area
         self.insert1(dict(
             key,
@@ -108,62 +102,25 @@ class ESim(dj.Lookup):
     contents = [
         dict(esim=0, esim_description="Lambertian 10 x 10", beam_compression=1.0, y_steer=0.0, beam_xy_aspect=1.0),
 
-        dict(esim=10, esim_description="Narrowed to pi/4, steered -24/64", beam_compression=1 / 4,
-             y_steer=-24 / 64 * np.pi, beam_xy_aspect=1.0),
-        dict(esim=11, esim_description="Narrowed to pi/4, steered -18/64", beam_compression=1 / 4,
-             y_steer=-18 / 64 * np.pi, beam_xy_aspect=1.0),
-        dict(esim=12, esim_description="Narrowed to pi/4, steered -12/64", beam_compression=1 / 4,
-             y_steer=-12 / 64 * np.pi, beam_xy_aspect=1.0),
-        dict(esim=13, esim_description="Narrowed to pi/4, steered -6/64", beam_compression=1 / 4,
-             y_steer=-6 / 64 * np.pi, beam_xy_aspect=1.0),
-        dict(esim=14, esim_description="Narrowed to pi/4, steered 0", beam_compression=1 / 4, y_steer=0 * np.pi,
-             beam_xy_aspect=1.0),
-        dict(esim=15, esim_description="Narrowed to pi/4, steered +6/64", beam_compression=1 / 4,
-             y_steer=+6 / 64 * np.pi, beam_xy_aspect=1.0),
-        dict(esim=16, esim_description="Narrowed to pi/4, steered +12/64", beam_compression=1 / 4,
-             y_steer=+12 / 64 * np.pi, beam_xy_aspect=1.0),
-        dict(esim=17, esim_description="Narrowed to pi/4, steered +18/64", beam_compression=1 / 4,
-             y_steer=+18 / 64 * np.pi, beam_xy_aspect=1.0),
-        dict(esim=18, esim_description="Narrowed to pi/4, steered +24/64", beam_compression=1 / 4,
-             y_steer=+24 / 64 * np.pi, beam_xy_aspect=2.0),
+        dict(esim=10, esim_description="Narrowed to pi/4, steered -24/64", beam_compression=1 / 4, y_steer=-24 / 64 * np.pi, beam_xy_aspect=1.0),
+        dict(esim=11, esim_description="Narrowed to pi/4, steered -18/64", beam_compression=1 / 4, y_steer=-18 / 64 * np.pi, beam_xy_aspect=1.0),
+        dict(esim=12, esim_description="Narrowed to pi/4, steered -12/64", beam_compression=1 / 4, y_steer=-12 / 64 * np.pi, beam_xy_aspect=1.0),
+        dict(esim=13, esim_description="Narrowed to pi/4, steered -6/64",  beam_compression=1 / 4, y_steer=-6 / 64 * np.pi,  beam_xy_aspect=1.0),
+        dict(esim=14, esim_description="Narrowed to pi/4, steered 0",      beam_compression=1 / 4, y_steer=0 * np.pi,        beam_xy_aspect=1.0),
+        dict(esim=15, esim_description="Narrowed to pi/4, steered +6/64",  beam_compression=1 / 4, y_steer=+6 / 64 * np.pi,  beam_xy_aspect=1.0),
+        dict(esim=16, esim_description="Narrowed to pi/4, steered +12/64", beam_compression=1 / 4, y_steer=+12 / 64 * np.pi, beam_xy_aspect=1.0),
+        dict(esim=17, esim_description="Narrowed to pi/4, steered +18/64", beam_compression=1 / 4, y_steer=+18 / 64 * np.pi, beam_xy_aspect=1.0),
+        dict(esim=18, esim_description="Narrowed to pi/4, steered +24/64", beam_compression=1 / 4, y_steer=+24 / 64 * np.pi, beam_xy_aspect=1.0),
 
-        dict(esim=20, esim_description="Narrowed to pi/3, steered -1/3", beam_compression=1 / 3, y_steer=-np.pi / 3,
-             beam_xy_aspect=1.0),
-        dict(esim=21, esim_description="Narrowed to pi/3, steered -1/4", beam_compression=1 / 3, y_steer=-np.pi / 4,
-             beam_xy_aspect=1.0),
-        dict(esim=22, esim_description="Narrowed to pi/3, steered -1/6", beam_compression=1 / 3, y_steer=-np.pi / 6,
-             beam_xy_aspect=1.0),
-        dict(esim=23, esim_description="Narrowed to pi/3, steered -1/12", beam_compression=1 / 3, y_steer=-np.pi / 12,
-             beam_xy_aspect=1.0),
-        dict(esim=24, esim_description="Narrowed to pi/3, steered 0", beam_compression=1 / 3, y_steer=0,
-             beam_xy_aspect=1.0),
-        dict(esim=25, esim_description="Narrowed to pi/3, steered +1/12", beam_compression=1 / 3, y_steer=+np.pi / 12,
-             beam_xy_aspect=1.0),
-        dict(esim=26, esim_description="Narrowed to pi/3, steered +1/6", beam_compression=1 / 3, y_steer=+np.pi / 6,
-             beam_xy_aspect=1.0),
-        dict(esim=27, esim_description="Narrowed to pi/3, steered +1/4", beam_compression=1 / 3, y_steer=+np.pi / 4,
-             beam_xy_aspect=1.0),
-        dict(esim=28, esim_description="Narrowed to pi/3, steered +1/3", beam_compression=1 / 3, y_steer=+np.pi / 3,
-             beam_xy_aspect=1.0),
-
-        dict(esim=30, esim_description="Narrowed to pi/3, steered -1/3", beam_compression=1 / 4, y_steer=-np.pi / 3,
-             beam_xy_aspect=2.0),
-        dict(esim=31, esim_description="Narrowed to pi/3, steered -1/4", beam_compression=1 / 4, y_steer=-np.pi / 4,
-             beam_xy_aspect=2.0),
-        dict(esim=32, esim_description="Narrowed to pi/3, steered -1/6", beam_compression=1 / 4, y_steer=-np.pi / 6,
-             beam_xy_aspect=2.0),
-        dict(esim=33, esim_description="Narrowed to pi/3, steered -1/12", beam_compression=1 / 4, y_steer=-np.pi / 12,
-             beam_xy_aspect=2.0),
-        dict(esim=34, esim_description="Narrowed to pi/3, steered 0", beam_compression=1 / 4, y_steer=0,
-             beam_xy_aspect=2.0),
-        dict(esim=35, esim_description="Narrowed to pi/3, steered +1/12", beam_compression=1 / 4, y_steer=+np.pi / 12,
-             beam_xy_aspect=2.0),
-        dict(esim=36, esim_description="Narrowed to pi/3, steered +1/6", beam_compression=1 / 4, y_steer=+np.pi / 6,
-             beam_xy_aspect=2.0),
-        dict(esim=37, esim_description="Narrowed to pi/3, steered +1/4", beam_compression=1 / 4, y_steer=+np.pi / 4,
-             beam_xy_aspect=2.0),
-        dict(esim=38, esim_description="Narrowed to pi/3, steered +1/3", beam_compression=1 / 4, y_steer=+np.pi / 3,
-             beam_xy_aspect=2.0),
+        dict(esim=20, esim_description="Narrowed to pi/3, steered -1/3",  beam_compression=1 / 3, y_steer=-np.pi / 3,  beam_xy_aspect=1.0),
+        dict(esim=21, esim_description="Narrowed to pi/3, steered -1/4",  beam_compression=1 / 3, y_steer=-np.pi / 4,  beam_xy_aspect=1.0),
+        dict(esim=22, esim_description="Narrowed to pi/3, steered -1/6",  beam_compression=1 / 3, y_steer=-np.pi / 6,  beam_xy_aspect=1.0),
+        dict(esim=23, esim_description="Narrowed to pi/3, steered -1/12", beam_compression=1 / 3, y_steer=-np.pi / 12, beam_xy_aspect=1.0),
+        dict(esim=24, esim_description="Narrowed to pi/3, steered 0",     beam_compression=1 / 3, y_steer=0,           beam_xy_aspect=1.0),
+        dict(esim=25, esim_description="Narrowed to pi/3, steered +1/12", beam_compression=1 / 3, y_steer=+np.pi / 12, beam_xy_aspect=1.0),
+        dict(esim=26, esim_description="Narrowed to pi/3, steered +1/6",  beam_compression=1 / 3, y_steer=+np.pi / 6,  beam_xy_aspect=1.0),
+        dict(esim=27, esim_description="Narrowed to pi/3, steered +1/4",  beam_compression=1 / 3, y_steer=+np.pi / 4,  beam_xy_aspect=1.0),
+        dict(esim=28, esim_description="Narrowed to pi/3, steered +1/3",  beam_compression=1 / 3, y_steer=+np.pi / 3,  beam_xy_aspect=1.0)
     ]
 
 
@@ -190,7 +147,7 @@ class EField(dj.Computed):
             emitter_size=(float(spec['emitter_width']), float(spec['emitter_height']), 0))
 
         space = SpaceTracer(**kwargs)
-        space.run(hops=500_000)
+        space.run(hops=100_000)
         self.insert1(dict(
             key,
             volume=np.float32(space.volume),
