@@ -101,7 +101,30 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}')]
+            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}'),
+        dict(
+            design=12,
+            design_description="Hex-19 pitch 150, steered, cos^4",
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=150,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 4, "e": [32, 33, 34, 34, 35, 36]}'),
+        dict(
+            design=13,
+            design_description="Hex-37 pitch 120, steered, cos^8",
+            lattice='hex',
+            lattice_rows=7,
+            lattice_pitch=120,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 8, "e": [32, 33, 34, 35, 36]}')
+    ]
 
     @staticmethod
     def make_lattice(lattice_type, nrows):
