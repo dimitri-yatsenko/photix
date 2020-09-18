@@ -123,7 +123,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [32, 33, 34, 35, 36]}')
+            field_sims='{"d": 8, "e": [32, 33, 34, 35, 36]}'),
 
         dict(
             design=101,
