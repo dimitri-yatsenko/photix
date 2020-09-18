@@ -31,6 +31,7 @@ class DSim(dj.Lookup):
         dict(dsim=2, detector_type='narrowed2', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description="Narrow selective as 2th power of cosine, 10x20 rect"),
         dict(dsim=4, detector_type='narrowed4', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description="Narrow selective as 4th power of cosine, 10x20 rect"),
         dict(dsim=8, detector_type='narrowed8', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description="Narrow selective as 8th power of cosine, 10x20 rect"),
+        dict(dsim=10, detector_type='narrowed8', detector_height=20, scatter_length=100, absorption_length=14000, dsim_description="Narrow selective as 10th power of cosine, 10x20 rect"),
         dict(dsim=14, detector_type='narrowed8', detector_height=20, scatter_length=48, absorption_length=16000, dsim_description="same as 8 but more scatter")]
 
 
@@ -131,6 +132,22 @@ class ESim(dj.Lookup):
         dict(esim=36, esim_description="Narrowed to pi/6, steered +1/6", beam_compression=1 / 6, y_steer=+np.pi / 6, beam_xy_aspect=1.0),
         dict(esim=37, esim_description="Narrowed to pi/6, steered +1/4", beam_compression=1 / 6, y_steer=+np.pi / 4, beam_xy_aspect=1.0),
         dict(esim=38, esim_description="Narrowed to pi/6, steered +1/3", beam_compression=1 / 6, y_steer=+np.pi / 3, beam_xy_aspect=1.0)
+
+        dict(esim=41, esim_description="Narrowed to pi/18, steered -1/4", beam_compression=1 / 6, y_steer=-np.pi / 4,
+             beam_xy_aspect=1.0),
+        dict(esim=42, esim_description="Narrowed to pi/18, steered -1/6", beam_compression=1 / 6, y_steer=-np.pi / 6,
+             beam_xy_aspect=1.0),
+        dict(esim=43, esim_description="Narrowed to pi/18, steered -1/12", beam_compression=1 / 6, y_steer=-np.pi / 12,
+             beam_xy_aspect=1.0),
+        dict(esim=44, esim_description="Narrowed to pi/18, steered 0", beam_compression=1 / 6, y_steer=0,
+             beam_xy_aspect=1.0),
+        dict(esim=45, esim_description="Narrowed to pi/18, steered +1/12", beam_compression=1 / 6, y_steer=+np.pi / 12,
+             beam_xy_aspect=1.0),
+        dict(esim=46, esim_description="Narrowed to pi/18, steered +1/6", beam_compression=1 / 6, y_steer=+np.pi / 6,
+             beam_xy_aspect=1.0),
+        dict(esim=47, esim_description="Narrowed to pi/18, steered +1/4", beam_compression=1 / 6, y_steer=+np.pi / 4,
+             beam_xy_aspect=1.0),
+
     ]
 
 
