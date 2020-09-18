@@ -23,7 +23,7 @@ class Tissue(dj.Computed):
     def make(self, key):
         density = 110000  # per cubic mm
         xyz = np.stack((design.Geometry.EPixel() & key).fetch('e_loc'))
-        margin = 150
+        margin = 100
         bounds_min = xyz.min(axis=0) - margin
         bounds_max = xyz.max(axis=0) + margin
         volume = (bounds_max - bounds_min).prod() * 1e-9

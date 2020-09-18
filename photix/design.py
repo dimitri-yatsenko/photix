@@ -112,7 +112,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [32, 33, 34, 34, 35, 36]}'),k
+            field_sims='{"d": 4, "e": [32, 33, 34, 34, 35, 36]}'),
         dict(
             design=13,
             design_description="Hex-37 pitch 120, steered, cos^8",

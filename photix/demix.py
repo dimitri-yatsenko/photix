@@ -35,10 +35,8 @@ class IlluminationCycle(dj.Computed):
         detection = np.stack(
             [x for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # detectors x sources
         assert emission.dtype == np.float32 and detection.dtype == np.float32
-        target_rank = min(
-            emission.shape[1],
-            detection.shape[0] * emission.shape[0],
-            (Tissue & key).fetch1('inner_count')*2)
+        inner_count, density = (Tissue & key).fetch1('inner_count', 'density')
+        target_rank = inner_count / density * 150000
         illumination = np.identity(emission.shape[0], dtype=np.uint8)
         nframes = int(np.ceil(target_rank / detection.shape[0]))
 
