@@ -242,6 +242,8 @@ class SpaceTracer:
             return np.maximum(0, self.directions[:, 2]) ** 4  # along z-axis
         if self.detector_type == "narrowed8":
             return np.maximum(0, self.directions[:, 2]) ** 8  # along z-axis
+        if self.detector_type == "narrowed10":
+            return np.maximum(0, self.directions[:, 2]) ** 8  # along z-axis
         raise Exception('Unknown detector type')
 
     def accumulate(self, start_points, end_points, lengths):

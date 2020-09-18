@@ -126,17 +126,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 8, "e": [32, 33, 34, 35, 36]}'),
 
         dict(
-            design=101,
-            design_description="Shepherd/Roukes original",
-            lattice='sqdiag',
-            lattice_rows=7,
-            lattice_pitch=200,
-            epixel_depths="0:450:50,8",
-            epixel_azimuths="0:3240:45",
-            dpixel_depths="25:420:50,2",
-            dpixel_azimuths="0:1440:90",
-            field_sims='{"d": 0, "e": [0]}'),
-        dict(
             design=102,
             design_description="Hex-19 pitch 200, steered",
             lattice='hex',
@@ -146,7 +135,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 1, "e": [11, 12, 13, 14, 15, 16, 17]}'),
+            field_sims='{"d": 10, "e": [11, 12, 13, 14, 15, 16, 17]}'),
         dict(
             design=104,
             design_description="Hex-19 pitch 200, steered, cos^4",
