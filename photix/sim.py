@@ -23,7 +23,7 @@ class Tissue(dj.Computed):
     def make(self, key):
         density = 110000  # per cubic mm
         xyz = np.stack((design.Geometry.EPixel() & key).fetch('e_loc'))
-        margin = 100
+        margin = 75
         bounds_min = xyz.min(axis=0) - margin
         bounds_max = xyz.max(axis=0) + margin
         volume = (bounds_max - bounds_min).prod() * 1e-9
@@ -144,7 +144,6 @@ class Detection(dj.Computed):
                 basis = np.stack((np.cross(basis_y, basis_z), basis_y, basis_z)).T
                 assert np.allclose(basis.T @ basis, np.eye(3)), "incorrect dpixel orientation"
                 vxyz = np.int16(np.round((points - d_xyz) @ basis / pitch + dims / 2))
-
                 # sample DSim volume
                 v = np.array([
                     volume[q[0], q[1], q[2]] if
