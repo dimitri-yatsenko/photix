@@ -2,7 +2,7 @@ import numpy as np
 import tqdm
 import datajoint as dj
 import scipy
-from .sim import Fluorescence, Detection, Tissue
+from .sim import Fluorescence, Detection, Tissue, InnerPoints
 
 schema = dj.schema('photix')
 
@@ -154,6 +154,7 @@ class Cosine(dj.Computed):
 class SpikeSNR(dj.Computed):
     definition = """
     -> Demix
+    -> InnerPoints
     ---
     snr : longblob
     delta : float
@@ -165,8 +166,12 @@ class SpikeSNR(dj.Computed):
         delta = 0.03 * 0.4
         tau = 1.0
         dt = 0.02  # must match the one in Demix
+
+        inner, selection, demix_norm, bias = (Demix * InnerPoints & key).fetch1(
+            'inner', 'selection', 'demix_norm', 'bias_norm')
+
         demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
         rho = np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum())  # SNR improvement by matched filter
         snr = (bias < max_bias) * rho * delta / demix_norm
-        self.insert1(dict(key, snr=snr, delta=delta, frac_above_1=(snr >= 1.0).mean()))
+        self.insert1(dict(key, snr=snr, delta=delta, frac_above_1=(snr[inner[selection]] >= 1.0).mean()))
 

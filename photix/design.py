@@ -246,7 +246,17 @@ class Design(dj.Lookup):
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
             field_sims='{"d": 8, "e": [41, 42, 43, 44, 45, 46, 47]}'),
-
+        dict(
+            design=114,
+            design_description="",
+            lattice='hex',
+            lattice_rows=7,
+            lattice_pitch=120,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 8, "e": [42, 44, 46]}'),
     ]
 
     @staticmethod
