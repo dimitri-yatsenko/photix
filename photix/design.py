@@ -134,9 +134,8 @@ class Design(dj.Lookup):
             epixel_depths="0:450:50,8",
             epixel_azimuths="0:3240:45",
             dpixel_depths="25:420:50,2",
-            dpixel_azimuths="0:1440:90",
+            dpixel_azimuths="0:2880:180",
             field_sims='{"d": 0, "e": [0]}'),
-
         dict(
             design=102,
             design_description="",
