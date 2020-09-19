@@ -126,6 +126,18 @@ class Design(dj.Lookup):
             field_sims='{"d": 8, "e": [32, 33, 34, 35, 36]}'),
 
         dict(
+            design=101,
+            design_description="Shepherd/Roukes original",
+            lattice='sqdiag',
+            lattice_rows=7,
+            lattice_pitch=200,
+            epixel_depths="0:450:50,8",
+            epixel_azimuths="0:3240:45",
+            dpixel_depths="25:420:50,2",
+            dpixel_azimuths="0:1440:90",
+            field_sims='{"d": 0, "e": [0]}'),
+
+        dict(
             design=102,
             design_description="",
             lattice='hex',
