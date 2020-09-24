@@ -4,7 +4,7 @@ import datajoint as dj
 import scipy
 from .sim import Fluorescence, Detection, Tissue, InnerPoints
 
-schema = dj.schema('photix')
+schema = dj.schema('photixx')
 
 
 @schema
@@ -77,6 +77,7 @@ class Demix(dj.Computed):
         power = 0.04  # Total milliwatts to the brain
         dark_noise = 300  # counts per second
         seed = 0
+        mean_fluorescence = 0.03  # e.g. 0.03 = 0.05 times 60% detector efficiency
 
         # load the emission and detection matrices
         npoints, volume = (Tissue & key).fetch1('npoints', 'volume')
@@ -92,11 +93,11 @@ class Demix(dj.Computed):
         avg = nframes * illumination[illumination > 0].mean()
 
         emission = np.stack(
-            [x[selection] for x in (Fluorescence.EPixel & key).fetch('photons_per_cell')])  # emitters x sources
+            [x[selection] for x in (Fluorescence.EPixel & key).fetch('photons_per_cell')])  # E-pixels x sources
         emission = dt * illumination @ emission  # photons per frame
 
         detection = np.stack(
-            [x[selection] for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # detectors x sources
+            [x[selection] for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # D-pixels x sources
 
         # construct the mixing matrix mix: nchannels x ncells
         # mix = number of photons from neuron per frame at full fluorescence
@@ -108,7 +109,6 @@ class Demix(dj.Computed):
             mix[ichannel:ichannel + ndetectors] = detection * emission[ichannel // ndetectors]
 
         # normalize channels by their noise
-        mean_fluorescence = 0.03
         nu = dark_noise * dt / nframes
         weights = 1 / np.sqrt(mix.sum(axis=1, keepdims=True) * mean_fluorescence + nu)  # used to be axis=0
         mix *= weights
@@ -171,7 +171,6 @@ class SpikeSNR(dj.Computed):
             'inner', 'selection', 'demix_norm', 'bias_norm')
 
         demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
-        rho = np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum())  # SNR improvement by matched filter
+        rho = 7.0  # np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum())  # SNR improvement by matched filter
         snr = (bias < max_bias) * rho * delta / demix_norm
         self.insert1(dict(key, snr=snr, delta=delta, frac_above_1=(snr[inner[selection]] >= 1.0).mean()))
-
