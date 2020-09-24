@@ -163,18 +163,22 @@ class SpikeSNR(dj.Computed):
     -> Demix
     ---
     snr : longblob
+    tau : float
     delta : float
     frac_above_1 : float
+    rho : float
     """
 
     def make(self, key):
         max_bias = 0.01
         tau = 1.0
-
         dt, mean_fluorescence, inner, selection, demix_norm, bias = (Demix & key).fetch1(
             'dt', 'mean_fluorescence', 'inner', 'selection', 'demix_norm', 'bias_norm')
         delta = mean_fluorescence * 0.3
         demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
-        rho = 7.0  # np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum())  # SNR improvement by matched filter
+        h = np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau))
+        rho = h.sum()/np.sqrt((h**2).sum())    # SNR improvement by matched filter
         snr = (bias < max_bias) * rho * delta / demix_norm
-        self.insert1(dict(key, snr=snr, delta=delta, frac_above_1=(snr[inner[selection]] >= 1.0).mean()))
+        self.insert1(dict(key,
+                          snr=snr, delta=delta, rho=rho, tau=tau,
+                          frac_above_1=(snr[inner[selection]] >= 1.0).mean()))
