@@ -392,9 +392,9 @@ class Geometry(dj.Computed):
             # D pixels
             azimuths = np.arange(*[float(x)
                                    for x in design['dpixel_azimuths'].split(':')])
-            if design == 101:
+            if key['design'] == 101:
                 # sorry for special case
-                azimuths = azimuths + xy[1]//200 * 90
+                azimuths += xy[1]//200 * 90
             depths, group = design['dpixel_depths'].split(',')
             depths = np.arange(*[float(x) for x in depths.split(':')])
             pos = np.vstack([np.array([[xy[0], xy[1], d]] * int(group)) for d in depths])

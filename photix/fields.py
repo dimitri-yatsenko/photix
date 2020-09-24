@@ -133,6 +133,7 @@ class ESim(dj.Lookup):
         dict(esim=37, esim_description="Narrowed to pi/6, steered +1/4", beam_compression=1 / 6, y_steer=+np.pi / 4, beam_xy_aspect=1.0),
         dict(esim=38, esim_description="Narrowed to pi/6, steered +1/3", beam_compression=1 / 6, y_steer=+np.pi / 3, beam_xy_aspect=1.0),
 
+        dict(esim=40, esim_description="Narrowed to pi/18, steered -1/3", beam_compression=1 / 18, y_steer=-np.pi / 3, beam_xy_aspect=1.0),
         dict(esim=41, esim_description="Narrowed to pi/18, steered -1/4", beam_compression=1 / 18, y_steer=-np.pi / 4, beam_xy_aspect=1.0),
         dict(esim=42, esim_description="Narrowed to pi/18, steered -1/6", beam_compression=1 / 18, y_steer=-np.pi / 6, beam_xy_aspect=1.0),
         dict(esim=43, esim_description="Narrowed to pi/18, steered -1/12", beam_compression=1 / 18, y_steer=-np.pi / 12, beam_xy_aspect=1.0),
@@ -140,6 +141,7 @@ class ESim(dj.Lookup):
         dict(esim=45, esim_description="Narrowed to pi/18, steered +1/12", beam_compression=1 / 18, y_steer=+np.pi / 12, beam_xy_aspect=1.0),
         dict(esim=46, esim_description="Narrowed to pi/18, steered +1/6", beam_compression=1 / 18, y_steer=+np.pi / 6, beam_xy_aspect=1.0),
         dict(esim=47, esim_description="Narrowed to pi/18, steered +1/4", beam_compression=1 / 18, y_steer=+np.pi / 4, beam_xy_aspect=1.0),
+        dict(esim=48, esim_description="Narrowed to pi/18, steered +1/3", beam_compression=1 / 18, y_steer=+np.pi / 3, beam_xy_aspect=1.0),
     ]
 
 
