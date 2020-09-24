@@ -31,7 +31,7 @@ class DSim(dj.Lookup):
         dict(dsim=4, detector_type='narrowed4', detector_height=20, scatter_length=500, absorption_length=1.5e4),
         dict(dsim=8, detector_type='narrowed8', detector_height=20, scatter_length=500, absorption_length=1.5e4),
         dict(dsim=10, detector_type='narrowed10', detector_height=20, scatter_length=500, absorption_length=1.5e4),
-        dict(dsim=14, detector_type='narrowed8', detector_height=20, scatter_length=500, absorption_length=1.5e4)]
+        dict(dsim=14, detector_type='narrowed8', detector_height=20, scatter_length=50, absorption_length=1.5e4)]
 
 
 @schema
@@ -139,7 +139,17 @@ class ESim(dj.Lookup):
         dict(esim=45, beam_compression=1 / 12, y_steer=+np.pi / 12, scatter_length=500, absorption_length=1.5e4),
         dict(esim=46, beam_compression=1 / 12, y_steer=+np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=47, beam_compression=1 / 12, y_steer=+np.pi / 4, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=48, beam_compression=1 / 12, y_steer=+np.pi / 3, scatter_length=500, absorption_length=1.5e4),]
+        dict(esim=48, beam_compression=1 / 12, y_steer=+np.pi / 3, scatter_length=500, absorption_length=1.5e4),
+
+        dict(esim=130, beam_compression=1 / 6, y_steer=-np.pi / 3, scatter_length=50, absorption_length=1.5e4),
+        dict(esim=131, beam_compression=1 / 6, y_steer=-np.pi / 4, scatter_length=50, absorption_length=1.5e4),
+        dict(esim=132, beam_compression=1 / 6, y_steer=-np.pi / 6, scatter_length=50, absorption_length=1.5e4),
+        dict(esim=133, beam_compression=1 / 6, y_steer=-np.pi / 12, scatter_length=50, absorption_length=1.5e4),
+        dict(esim=134, beam_compression=1 / 6, y_steer=0, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=135, beam_compression=1 / 6, y_steer=+np.pi / 12, scatter_length=50, absorption_length=1.5e4),
+        dict(esim=136, beam_compression=1 / 6, y_steer=+np.pi / 6, scatter_length=50, absorption_length=1.5e4),
+        dict(esim=137, beam_compression=1 / 6, y_steer=+np.pi / 4, scatter_length=50, absorption_length=1.5e4),
+        dict(esim=138, beam_compression=1 / 6, y_steer=+np.pi / 3, scatter_length=50, absorption_length=1.5e4),]
 
 
 @schema
