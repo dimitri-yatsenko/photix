@@ -64,19 +64,25 @@ class Demix(dj.Computed):
     -> IlluminationCycle
     -> Sample
     ---
+    dt  : float   # s
+    dark_noise :  float  # s^-1
+    emitter_power : float  # mW
+    mean_fluorescence : float  # fraction
     selection : longblob  # selected cells
     mix_norm : longblob    #  cell's mixing vector norm
     demix_norm : longblob  #  cell's demixing vector norm
     bias_norm : longblob  #  cell's bias vector norm
     trans_bias_norm : longblob # don't use. Saved just in case of wrong axis choice
-    avg_emitter_power : float  # (uW) when on
+    total_power : float  # mW
     """
 
     def make(self, key):
-        dt = 0.02  # (s) sample duration (one illumination cycle)
+        dt = 0.002  # (s) sample duration (one illumination cycle)
         dark_noise = 300  # counts per second
         seed = 0
-        mean_fluorescence = 0.03  # e.g. 0.03 = 0.05 times 60% detector efficiency
+        emitter_power = 1e-4  # 100 uW
+        detector_efficiency = 0.6
+        mean_fluorescence = 0.05  # e.g. 0.03 = 0.05 times 60% detector efficiency
 
         # load the emission and detection matrices
         npoints, volume = (Tissue & key).fetch1('npoints', 'volume')
@@ -88,15 +94,12 @@ class Demix(dj.Computed):
 
         illumination = (IlluminationCycle & key).fetch1('illumination')
         nframes = illumination.shape[0]
-        assert False
-        illumination = power * illumination / illumination.sum()  # watts averaged over the entire cycle
-        avg = nframes * illumination[illumination > 0].mean()
-
-        emission = np.stack(
+        illumination = emitter_power * illumination * dt / nframes  # joules
+        emission = mean_fluorescence * np.stack(
             [x[selection] for x in (Fluorescence.EPixel & key).fetch('photons_per_cell')])  # E-pixels x sources
-        emission = dt * illumination @ emission  # photons per frame
+        emission = illumination @ emission  # photons per frame
 
-        detection = np.stack(
+        detection = detector_efficiency * np.stack(
             [x[selection] for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # D-pixels x sources
 
         # construct the mixing matrix mix: nchannels x ncells
@@ -127,8 +130,12 @@ class Demix(dj.Computed):
 
         self.insert1(dict(
             key,
+            dt=dt,
+            dark_noise=dark_noise,
+            emitter_power=emitter_power*1e3,
+            mean_fluorescence=mean_fluorescence,
             selection=selection,
-            avg_emitter_power=avg * 1e6,
+            total_power=illumination.sum()/dt*1e3,
             mix_norm=np.linalg.norm(mix, axis=0),
             demix_norm=np.linalg.norm(demix, axis=1),
             bias_norm=np.linalg.norm(bias, axis=1),
