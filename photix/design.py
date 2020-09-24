@@ -13,8 +13,6 @@ class Design(dj.Lookup):
     definition = """
     design : int 
     ---
-    design_description : varchar(300)     
-
     lattice : varchar(16)  # lattice type: sqdiag, hex
     lattice_rows : tinyint  
     lattice_pitch : float # um
@@ -27,7 +25,6 @@ class Design(dj.Lookup):
     contents = [
         dict(
             design=101,
-            design_description="Shepherd/Roukes original",
             lattice='sqdiag',
             lattice_rows=7,
             lattice_pitch=200,
@@ -38,7 +35,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 0, "e": [0]}'),
         dict(
             design=102,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=200,
@@ -49,7 +45,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 1, "e": [11, 12, 13, 14, 15, 16, 17]}'),
         dict(
             design=104,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=200,
@@ -60,7 +55,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 4, "e": [21, 22, 23, 24, 25, 26, 27]}'),
         dict(
             design=105,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=200,
@@ -71,7 +65,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 8, "e": [21, 22, 23, 24, 25, 26, 27]}'),
         dict(
             design=106,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=200,
@@ -82,7 +75,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 8, "e": [31, 32, 33, 34, 35, 36, 37]}'),
         dict(
             design=107,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=200,
@@ -93,7 +85,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 10, "e": [31, 32, 33, 34, 35, 36, 37]}'),
         dict(
             design=108,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=150,
@@ -104,7 +95,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 10, "e": [41, 42, 43, 44, 45, 46, 47]}'),
         dict(
             design=109,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=120,
@@ -115,7 +105,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 10, "e": [41, 42, 43, 44, 45, 46, 47]}'),
         dict(
             design=110,
-            design_description="",
             lattice='hex',
             lattice_rows=7,
             lattice_pitch=120,
@@ -126,7 +115,6 @@ class Design(dj.Lookup):
             field_sims='{"d": 10, "e": [41, 42, 43, 44, 45, 46, 47]}'),
         dict(
             design=111,
-            design_description="",
             lattice='hex',
             lattice_rows=5,
             lattice_pitch=150,
@@ -135,39 +123,6 @@ class Design(dj.Lookup):
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
             field_sims='{"d": 8, "e": [41, 42, 43, 44, 45, 46, 47]}'),
-        dict(
-            design=112,
-            design_description="",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=120,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [41, 42, 43, 44, 45, 46, 47]}'),
-        dict(
-            design=113,
-            design_description="",
-            lattice='hex',
-            lattice_rows=7,
-            lattice_pitch=120,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [41, 42, 43, 44, 45, 46, 47]}'),
-        dict(
-            design=114,
-            design_description="",
-            lattice='hex',
-            lattice_rows=7,
-            lattice_pitch=120,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [42, 44, 46]}'),
         dict(
             design=115,
             design_description="",
@@ -190,7 +145,6 @@ class Design(dj.Lookup):
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
             field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
-
         dict(
             design=117,
             design_description="",
@@ -202,7 +156,6 @@ class Design(dj.Lookup):
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
             field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
-
     ]
 
     @staticmethod
