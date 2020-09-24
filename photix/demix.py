@@ -166,8 +166,9 @@ class SpikeSNR(dj.Computed):
     snr : longblob
     tau : float
     delta : float
-    frac_above_1 : float
     rho : float
+    avg_snr : float
+    frac_above_1 : float
     """
 
     def make(self, key):
@@ -187,5 +188,5 @@ class SpikeSNR(dj.Computed):
         snr = (bias < max_bias) * rho * delta / demix_norm
 
         self.insert1(dict(key,
-                          snr=snr, delta=delta, rho=rho, tau=tau,
+                          snr=snr, delta=delta, rho=rho, tau=tau, avg_snr=snr[inner].mean(),
                           frac_above_1=(snr[inner] >= 1.0).mean()))
