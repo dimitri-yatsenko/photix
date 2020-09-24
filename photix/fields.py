@@ -99,13 +99,13 @@ class ESim(dj.Lookup):
     """
 
     contents = [
-        dict(esim=0, beam_compression=1.0, y_steer=0.0),
+        dict(esim=0, beam_compression=1.0, y_steer=0.0, scatter_length=500, absorption_length=1.5e4),
 
         dict(esim=20, beam_compression=1 / 3, y_steer=-np.pi / 3, scatter_length=500, absorption_length=1.5e4),
         dict(esim=21, beam_compression=1 / 3, y_steer=-np.pi / 4, scatter_length=500, absorption_length=1.5e4),
         dict(esim=22, beam_compression=1 / 3, y_steer=-np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=23, beam_compression=1 / 3, y_steer=-np.pi / 12, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=24, beam_compression=1 / 3, y_steer=0, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=24, beam_compression=1 / 3, y_steer=0,           scatter_length=500, absorption_length=1.5e4),
         dict(esim=25, beam_compression=1 / 3, y_steer=+np.pi / 12, scatter_length=500, absorption_length=1.5e4),
         dict(esim=26, beam_compression=1 / 3, y_steer=+np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=27, beam_compression=1 / 3, y_steer=+np.pi / 4, scatter_length=500, absorption_length=1.5e4),
@@ -115,7 +115,7 @@ class ESim(dj.Lookup):
         dict(esim=21, beam_compression=1 / 4, y_steer=-np.pi / 4, scatter_length=500, absorption_length=1.5e4),
         dict(esim=22, beam_compression=1 / 4, y_steer=-np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=23, beam_compression=1 / 4, y_steer=-np.pi / 12, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=24, beam_compression=1 / 4, y_steer=0, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=24, beam_compression=1 / 4, y_steer=0,             scatter_length=500, absorption_length=1.5e4),
         dict(esim=25, beam_compression=1 / 4, y_steer=+np.pi / 12, scatter_length=500, absorption_length=1.5e4),
         dict(esim=26, beam_compression=1 / 4, y_steer=+np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=27, beam_compression=1 / 4, y_steer=+np.pi / 4, scatter_length=500, absorption_length=1.5e4),
