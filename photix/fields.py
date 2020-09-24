@@ -105,7 +105,7 @@ class ESim(dj.Lookup):
         dict(esim=11, beam_compression=1 / 4, y_steer=-np.pi / 4, scatter_length=500, absorption_length=1.5e4),
         dict(esim=12, beam_compression=1 / 4, y_steer=-np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=13, beam_compression=1 / 4, y_steer=-np.pi / 12, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=14, beam_compression=1 / 4, y_steer=0,             scatter_length=500, absorption_length=1.5e4),
+        dict(esim=14, beam_compression=1 / 4, y_steer=0,         scatter_length=500, absorption_length=1.5e4),
         dict(esim=15, beam_compression=1 / 4, y_steer=+np.pi / 12, scatter_length=500, absorption_length=1.5e4),
         dict(esim=16, beam_compression=1 / 4, y_steer=+np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=17, beam_compression=1 / 4, y_steer=+np.pi / 4, scatter_length=500, absorption_length=1.5e4),
