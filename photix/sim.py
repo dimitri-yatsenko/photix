@@ -15,7 +15,6 @@ class Tissue(dj.Computed):
     margin : float # (um) margin to include on boundaries
     min_distance : float  # (um)
     points  : longblob  # cell xyz
-    inner  : longblob  # boolean indices of the inner points
     npoints : int    # total number of points in volume
     inner_count : int  # number of points inside the probe boundaries 
     volume : float  # (mm^3), hull volume including outer points
@@ -47,7 +46,6 @@ class Tissue(dj.Computed):
             key, margin=margin,
             density=density,
             npoints=points.shape[0], min_distance=min_distance,
-            inner=inner,
             points=points,
             volume=spatial.ConvexHull(points).volume * 1e-9,
             inner_count=inner.sum()))

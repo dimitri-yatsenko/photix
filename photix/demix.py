@@ -2,7 +2,7 @@ import numpy as np
 import tqdm
 import datajoint as dj
 import scipy
-from .sim import Fluorescence, Detection, Tissue, InnerPoints
+from .sim import Fluorescence, Detection, Tissue
 
 schema = dj.schema('photixx')
 
@@ -83,6 +83,7 @@ class Demix(dj.Computed):
         emitter_power = 1e-4  # 100 uW
         detector_efficiency = 0.6
         mean_fluorescence = 0.05  # e.g. 0.03 = 0.05 times 60% detector efficiency
+        photons_per_joule = 2.4e18
 
         # load the emission and detection matrices
         npoints, volume = (Tissue & key).fetch1('npoints', 'volume')
@@ -95,7 +96,7 @@ class Demix(dj.Computed):
         illumination = (IlluminationCycle & key).fetch1('illumination')
         nframes = illumination.shape[0]
         illumination = emitter_power * illumination * dt / nframes  # joules
-        emission = mean_fluorescence * np.stack(
+        emission = photons_per_joule * mean_fluorescence * np.stack(
             [x[selection] for x in (Fluorescence.EPixel & key).fetch('emit_probabilities')])  # E-pixels x sources
         emission = illumination @ emission  # photons per frame
 
@@ -172,13 +173,19 @@ class SpikeSNR(dj.Computed):
     def make(self, key):
         max_bias = 0.01
         tau = 1.0
-        dt, mean_fluorescence, inner, selection, demix_norm, bias = (Demix & key).fetch1(
-            'dt', 'mean_fluorescence', 'inner', 'selection', 'demix_norm', 'bias_norm')
+        dt, mean_fluorescence, inner_count, selection, demix_norm, bias = (
+                Demix * Tissue & key).fetch1(
+            'dt', 'mean_fluorescence',
+            'inner_count', 'selection', 'demix_norm', 'bias_norm')
+        inner = selection.copy()
+        inner[:inner_count] = False  # exclude cells outside the probe
+        inner = inner[selection]
         delta = mean_fluorescence * 0.3
         demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
         h = np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau))
         rho = h.sum()/np.sqrt((h**2).sum())    # SNR improvement by matched filter
         snr = (bias < max_bias) * rho * delta / demix_norm
+
         self.insert1(dict(key,
                           snr=snr, delta=delta, rho=rho, tau=tau,
-                          frac_above_1=(snr[inner[selection]] >= 1.0).mean()))
+                          frac_above_1=(snr[inner] >= 1.0).mean()))
