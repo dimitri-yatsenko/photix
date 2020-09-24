@@ -15,6 +15,7 @@ class Tissue(dj.Computed):
     margin : float # (um) margin to include on boundaries
     min_distance : float  # (um)
     points  : longblob  # cell xyz
+    inner  : longblob  # boolean indices of the inner points
     npoints : int    # total number of points in volume
     inner_count : int  # number of points inside the probe boundaries 
     volume : float  # (mm^3), hull volume including outer points
@@ -46,23 +47,10 @@ class Tissue(dj.Computed):
             key, margin=margin,
             density=density,
             npoints=points.shape[0], min_distance=min_distance,
+            inner=inner,
             points=points,
             volume=spatial.ConvexHull(points).volume * 1e-9,
             inner_count=inner.sum()))
-
-
-@schema
-class InnerPoints(dj.Computed):
-    definition = """
-    -> Tissue
-    ---
-    inner : longblob  # boolean index of points that are inside the probe
-    """
-
-    def make(self, key):
-        xyz = np.stack((design.Geometry.EPixel() & key).fetch('e_loc'))
-        points = (Tissue & key).fetch1('points')
-        self.insert1(dict(key, inner=(spatial.Delaunay(xyz).find_simplex(points)) != -1))
 
 
 @schema
@@ -82,8 +70,9 @@ class Fluorescence(dj.Computed):
         """
 
     def make(self, key):
-        neuron_cross_section = 1e-4  # um^2
-        photons_per_joule = 1 / (2.8 * 1.6e-19)  # 2.8 eV blue photons
+
+        neuron_cross_section = 0.1  # um^2
+        photons_per_joule = 2.4e18
         points = (Tissue & key).fetch1('points')
         self.insert1(key)
         for esim_key in (EField() & (Geometry.EField & key)).fetch("KEY"):

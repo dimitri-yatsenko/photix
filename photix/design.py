@@ -42,7 +42,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 1, "e": [11, 12, 13, 14, 15, 16, 17]}'),
+            field_sims='{"d": 1, "e": [10, 11, 12, 13, 14, 15, 16, 17, 18]}'),
         dict(
             design=104,
             lattice='hex',
@@ -52,7 +52,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [21, 22, 23, 24, 25, 26, 27]}'),
+            field_sims='{"d": 4, "e": [20, 21, 22, 23, 24, 25, 26, 27, 28]}'),
         dict(
             design=105,
             lattice='hex',
@@ -62,7 +62,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [21, 22, 23, 24, 25, 26, 27]}'),
+            field_sims='{"d": 8, "e": [20, 21, 22, 23, 24, 25, 26, 27, 28]}'),
         dict(
             design=106,
             lattice='hex',
@@ -72,7 +72,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [31, 32, 33, 34, 35, 36, 37]}'),
+            field_sims='{"d": 8, "e": [30, 31, 32, 33, 34, 35, 36, 37, 38]}'),
         dict(
             design=107,
             lattice='hex',
@@ -82,7 +82,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 10, "e": [31, 32, 33, 34, 35, 36, 37]}'),
+            field_sims='{"d": 10, "e": [30, 31, 32, 33, 34, 35, 36, 37, 38]}'),
         dict(
             design=108,
             lattice='hex',
@@ -92,7 +92,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 10, "e": [41, 42, 43, 44, 45, 46, 47]}'),
+            field_sims='{"d": 10, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
         dict(
             design=109,
             lattice='hex',
@@ -102,7 +102,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 10, "e": [41, 42, 43, 44, 45, 46, 47]}'),
+            field_sims='{"d": 10, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
         dict(
             design=110,
             lattice='hex',
@@ -112,7 +112,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 10, "e": [41, 42, 43, 44, 45, 46, 47]}'),
+            field_sims='{"d": 10, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
         dict(
             design=111,
             lattice='hex',
@@ -122,7 +122,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [41, 42, 43, 44, 45, 46, 47]}'),
+            field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
         dict(
             design=115,
             design_description="",
@@ -133,30 +133,7 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [41, 42, 43, 44, 45, 46, 47]}'),
-        dict(
-            design=116,
-            design_description="",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=200,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
-        dict(
-            design=117,
-            design_description="",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=150,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
-    ]
+            field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}')]
 
     @staticmethod
     def make_lattice(lattice_type, nrows):

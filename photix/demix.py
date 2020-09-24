@@ -74,7 +74,6 @@ class Demix(dj.Computed):
 
     def make(self, key):
         dt = 0.02  # (s) sample duration (one illumination cycle)
-        power = 0.04  # Total milliwatts to the brain
         dark_noise = 300  # counts per second
         seed = 0
         mean_fluorescence = 0.03  # e.g. 0.03 = 0.05 times 60% detector efficiency
@@ -89,6 +88,7 @@ class Demix(dj.Computed):
 
         illumination = (IlluminationCycle & key).fetch1('illumination')
         nframes = illumination.shape[0]
+        assert False
         illumination = power * illumination / illumination.sum()  # watts averaged over the entire cycle
         avg = nframes * illumination[illumination > 0].mean()
 
