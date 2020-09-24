@@ -3,7 +3,7 @@ from . import design
 from .design import *
 from .fields import *
 
-schema = dj.schema('photix')
+schema = dj.schema('photixx')
 
 
 @schema

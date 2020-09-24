@@ -146,7 +146,7 @@ class SpaceTracer:
                  emitter_shape="rect",
                  emitter_size=(10, 10, 0),
                  emitter_spread="lambertian",
-                 anisotropy=0.88, absorption_length=14000, scatter_length=100,
+                 anisotropy=0.88, absorption_length=15000, scatter_length=50,
                  beam_compression=1.0, beam_xy_aspect=1.0, y_steer=0.0,
                  detector_type='total'):
 

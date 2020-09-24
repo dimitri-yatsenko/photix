@@ -5,7 +5,7 @@ import itertools
 import json
 import tqdm
 
-schema = dj.schema('photix')
+schema = dj.schema('photixx')
 
 
 @schema
@@ -25,106 +25,6 @@ class Design(dj.Lookup):
     field_sims : varchar(200)  # json string specifying dfields and efields
     """
     contents = [
-        dict(
-            design=1,
-            design_description="Shepherd/Roukes original",
-            lattice='sqdiag',
-            lattice_rows=7,
-            lattice_pitch=200,
-            epixel_depths="0:450:50,8",
-            epixel_azimuths="0:3240:45",
-            dpixel_depths="25:420:50,2",
-            dpixel_azimuths="0:1440:90",
-            field_sims='{"d": 0, "e": [0]}'),
-        dict(
-            design=2,
-            design_description="Hex-19 pitch 200, steered",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=200,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 1, "e": [11, 12, 13, 14, 15, 16, 17]}'),
-        dict(
-            design=4,
-            design_description="Hex-19 pitch 200, steered, cos^4",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=200,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}'),
-        dict(
-            design=5,
-            design_description="Hex-19 pitch 200, steered, cos^4",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=200,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [21, 22, 23, 24, 25, 26, 27]}'),
-        dict(
-            design=8,
-            design_description="Hex-19 pitch 200, steered, cos^8",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=200,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [11, 12, 13, 14, 15, 16, 17]}'),
-        dict(
-            design=10,
-            design_description="Hex-19 pitch 150, steered, cos^4",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=150,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}'),
-        dict(
-            design=11,
-            design_description="Hex-37 pitch 120, steered, cos^4",
-            lattice='hex',
-            lattice_rows=7,
-            lattice_pitch=120,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [11, 12, 13, 14, 15, 16, 17]}'),
-        dict(
-            design=12,
-            design_description="Hex-19 pitch 150, steered, cos^4",
-            lattice='hex',
-            lattice_rows=5,
-            lattice_pitch=150,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 4, "e": [32, 33, 34, 35, 36]}'),
-        dict(
-            design=13,
-            design_description="Hex-37 pitch 120, steered, cos^8",
-            lattice='hex',
-            lattice_rows=7,
-            lattice_pitch=120,
-            epixel_depths="0:1001:30,1",
-            epixel_azimuths="22.5:4600:135",
-            dpixel_depths="15:1001:30,1",
-            dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [32, 33, 34, 35, 36]}'),
-
         dict(
             design=101,
             design_description="Shepherd/Roukes original",
