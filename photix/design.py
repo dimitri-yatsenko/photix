@@ -199,7 +199,11 @@ class Geometry(dj.Computed):
         esims = field_sims['e']
         dsim = field_sims['d']
         assert fields.DField & {'dsim': dsim}
-        assert all((fields.EField & {'esim': esim} for esim in esims))
+        try:
+            err = next(esim for esim in esims if {'esim': esim} not in (fields.EField & {'esim': esim}))
+            raise ValueError(err)
+        except StopIteration:
+            pass
         self.insert1(dict(key,
                           shanks_xy=np.array(shanks_xy),
                           n_shanks=len(shanks_xy)))

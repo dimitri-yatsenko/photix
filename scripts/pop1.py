@@ -1,3 +1,3 @@
 from photix import design
 
-design.Geometry.populate('design=101')
+design.Geometry.populate()

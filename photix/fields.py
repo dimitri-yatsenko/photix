@@ -101,6 +101,16 @@ class ESim(dj.Lookup):
     contents = [
         dict(esim=0, beam_compression=1.0, y_steer=0.0, scatter_length=500, absorption_length=1.5e4),
 
+        dict(esim=10, beam_compression=1 / 4, y_steer=-np.pi / 3, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=11, beam_compression=1 / 4, y_steer=-np.pi / 4, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=12, beam_compression=1 / 4, y_steer=-np.pi / 6, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=13, beam_compression=1 / 4, y_steer=-np.pi / 12, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=14, beam_compression=1 / 4, y_steer=0,             scatter_length=500, absorption_length=1.5e4),
+        dict(esim=15, beam_compression=1 / 4, y_steer=+np.pi / 12, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=16, beam_compression=1 / 4, y_steer=+np.pi / 6, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=17, beam_compression=1 / 4, y_steer=+np.pi / 4, scatter_length=500, absorption_length=1.5e4),
+        dict(esim=18, beam_compression=1 / 4, y_steer=+np.pi / 3, scatter_length=500, absorption_length=1.5e4),
+
         dict(esim=20, beam_compression=1 / 3, y_steer=-np.pi / 3, scatter_length=500, absorption_length=1.5e4),
         dict(esim=21, beam_compression=1 / 3, y_steer=-np.pi / 4, scatter_length=500, absorption_length=1.5e4),
         dict(esim=22, beam_compression=1 / 3, y_steer=-np.pi / 6, scatter_length=500, absorption_length=1.5e4),
@@ -110,16 +120,6 @@ class ESim(dj.Lookup):
         dict(esim=26, beam_compression=1 / 3, y_steer=+np.pi / 6, scatter_length=500, absorption_length=1.5e4),
         dict(esim=27, beam_compression=1 / 3, y_steer=+np.pi / 4, scatter_length=500, absorption_length=1.5e4),
         dict(esim=28, beam_compression=1 / 3, y_steer=+np.pi / 3, scatter_length=500, absorption_length=1.5e4),
-
-        dict(esim=20, beam_compression=1 / 4, y_steer=-np.pi / 3, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=21, beam_compression=1 / 4, y_steer=-np.pi / 4, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=22, beam_compression=1 / 4, y_steer=-np.pi / 6, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=23, beam_compression=1 / 4, y_steer=-np.pi / 12, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=24, beam_compression=1 / 4, y_steer=0,             scatter_length=500, absorption_length=1.5e4),
-        dict(esim=25, beam_compression=1 / 4, y_steer=+np.pi / 12, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=26, beam_compression=1 / 4, y_steer=+np.pi / 6, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=27, beam_compression=1 / 4, y_steer=+np.pi / 4, scatter_length=500, absorption_length=1.5e4),
-        dict(esim=28, beam_compression=1 / 4, y_steer=+np.pi / 3, scatter_length=500, absorption_length=1.5e4),
 
         dict(esim=30, beam_compression=1 / 6, y_steer=-np.pi / 3, scatter_length=500, absorption_length=1.5e4),
         dict(esim=31, beam_compression=1 / 6, y_steer=-np.pi / 4, scatter_length=500, absorption_length=1.5e4),
