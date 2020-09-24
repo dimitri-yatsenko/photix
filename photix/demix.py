@@ -31,7 +31,7 @@ class IlluminationCycle(dj.Computed):
 
     def make(self, key):
         emission = np.stack(
-            [x for x in (Fluorescence.EPixel & key).fetch('photons_per_cell')])  # emitters x sources
+            [x for x in (Fluorescence.EPixel & key).fetch('emit_probabilities')])  # emitters x sources
         detection = np.stack(
             [x for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # detectors x sources
         assert emission.dtype == np.float32 and detection.dtype == np.float32
@@ -96,7 +96,7 @@ class Demix(dj.Computed):
         nframes = illumination.shape[0]
         illumination = emitter_power * illumination * dt / nframes  # joules
         emission = mean_fluorescence * np.stack(
-            [x[selection] for x in (Fluorescence.EPixel & key).fetch('photons_per_cell')])  # E-pixels x sources
+            [x[selection] for x in (Fluorescence.EPixel & key).fetch('emit_probabilities')])  # E-pixels x sources
         emission = illumination @ emission  # photons per frame
 
         detection = detector_efficiency * np.stack(
@@ -161,7 +161,6 @@ class Cosine(dj.Computed):
 class SpikeSNR(dj.Computed):
     definition = """
     -> Demix
-    -> InnerPoints
     ---
     snr : longblob
     delta : float
@@ -170,13 +169,11 @@ class SpikeSNR(dj.Computed):
 
     def make(self, key):
         max_bias = 0.01
-        delta = 0.03 * 0.4
         tau = 1.0
-        dt = 0.02  # must match the one in Demix
 
-        inner, selection, demix_norm, bias = (Demix * InnerPoints & key).fetch1(
-            'inner', 'selection', 'demix_norm', 'bias_norm')
-
+        dt, mean_fluorescence, inner, selection, demix_norm, bias = (Demix & key).fetch1(
+            'dt', 'mean_fluorescence', 'inner', 'selection', 'demix_norm', 'bias_norm')
+        delta = mean_fluorescence * 0.3
         demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
         rho = 7.0  # np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau).sum())  # SNR improvement by matched filter
         snr = (bias < max_bias) * rho * delta / demix_norm
