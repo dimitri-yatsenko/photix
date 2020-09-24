@@ -65,14 +65,13 @@ class Fluorescence(dj.Computed):
         -> master
         -> Geometry.EField
         ---
-        photons_per_cell  : longblob   # photons emitted from cells per joule of illumination
-        total_photons : float  # total photons from all cells
+        emit_probabilities  : longblob   # photons emitted from cells per joule of illumination
+        total_probability : float  # mean probability per cell
         """
 
     def make(self, key):
 
         neuron_cross_section = 0.1  # um^2
-        photons_per_joule = 2.4e18
         points = (Tissue & key).fetch1('points')
         self.insert1(key)
         for esim_key in (EField() & (Geometry.EField & key)).fetch("KEY"):
@@ -87,16 +86,16 @@ class Fluorescence(dj.Computed):
                 basis = np.stack((np.cross(basis_y, basis_z), basis_y, basis_z)).T
                 assert np.allclose(basis.T @ basis, np.eye(3)), "incorrect epixel orientation"
                 vxyz = np.int16(np.round((points - e_xyz) @ basis / pitch + dims / 2))
-                # photon counts
-                v = neuron_cross_section * photons_per_joule * np.array([
+                # probabilities
+                v = neuron_cross_section * np.array([
                     volume[q[0], q[1], q[2]] if
                     0 <= q[0] < dims[0] and
                     0 <= q[1] < dims[1] and
                     0 <= q[2] < dims[2] else 0 for q in vxyz])
                 self.EPixel().insert1(
                     dict(k, **esim_key,
-                         photons_per_cell=np.float32(v),
-                         total_photons=v.sum()))
+                         emit_probabilities=np.float32(v),
+                         mean_probability=v.mean()))
 
 
 @schema
@@ -121,7 +120,7 @@ class Detection(dj.Computed):
         for dsim_key in (DSim & (Geometry.DField & key)).fetch("KEY"):
             volume, pitch, *dims = (DSim * DField & dsim_key).fetch1(
                 'volume', 'pitch', 'volume_dimx', 'volume_dimy', 'volume_dimz')
-            # just in case, normalize. Max detection should already be approximately 0.5.
+            # just in case, normalize to 0.5. Max detection should already be approximately 0.5.
             # Remove normalization after additional sim verifications
             volume = 0.5 * volume / volume.max()
             dims = np.array(dims)
