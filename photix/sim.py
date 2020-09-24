@@ -66,7 +66,7 @@ class Fluorescence(dj.Computed):
         -> Geometry.EField
         ---
         emit_probabilities  : longblob   # photons emitted from cells per joule of illumination
-        total_probability : float  # mean probability per cell
+        mean_probability : float  # mean probability per cell
         """
 
     def make(self, key):
