@@ -1,5 +1,4 @@
 import numpy as np
-from scipy import spatial
 import tqdm
 from matplotlib_scalebar.scalebar import ScaleBar
 from matplotlib import pyplot as plt
