@@ -173,18 +173,18 @@ class SpikeSNR(dj.Computed):
 
     def make(self, key):
         max_bias = 0.01
-        tau = 1.0
+        tau = 1.5
         dt, mean_fluorescence, inner_count, selection, demix_norm, bias = (
                 Demix * Tissue & key).fetch1(
             'dt', 'mean_fluorescence',
             'inner_count', 'selection', 'demix_norm', 'bias_norm')
         inner = selection.copy()
-        inner[:inner_count] = False  # exclude cells outside the probe
+        inner[inner_count:] = False  # exclude cells outside the probe
         inner = inner[selection]
-        delta = mean_fluorescence * 0.3
+        delta = mean_fluorescence * 0.4
         demix_norm, bias = (Demix & key).fetch1('demix_norm', 'bias_norm')
-        h = np.sqrt(np.exp(-2 * np.r_[0:6 * tau:dt] / tau))
-        rho = h.sum()/np.sqrt((h**2).sum())    # SNR improvement by matched filter
+        h = np.exp(-np.r_[0:6 * tau:dt] / tau)
+        rho = np.sqrt((h**2).sum())/h[0]
         snr = (bias < max_bias) * rho * delta / demix_norm
 
         self.insert1(dict(key,
