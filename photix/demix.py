@@ -4,7 +4,7 @@ import datajoint as dj
 import scipy
 from .sim import Fluorescence, Detection, Tissue
 
-schema = dj.schema('photixx')
+schema = dj.schema('photixxx')
 
 
 @schema
@@ -31,9 +31,9 @@ class IlluminationCycle(dj.Computed):
 
     def make(self, key):
         emission = np.stack(
-            [x for x in (Fluorescence.EPixel & key).fetch('emit_probabilities')])  # emitters x sources
+            [x for x in (Fluorescence.EField & key).fetch('emit_probabilities')])  # emitters x sources
         detection = np.stack(
-            [x for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # detectors x sources
+            [x for x in (Detection.DField & key).fetch('detect_probabilities')])  # detectors x sources
         assert emission.dtype == np.float32 and detection.dtype == np.float32
         npoints, density = (Tissue & key).fetch1('npoints', 'density')
         target_rank = npoints / density * 120000
@@ -97,11 +97,11 @@ class Demix(dj.Computed):
         nframes = illumination.shape[0]
         illumination = emitter_power * illumination * dt / nframes  # joules
         emission = photons_per_joule * mean_fluorescence * np.stack(
-            [x[selection] for x in (Fluorescence.EPixel & key).fetch('emit_probabilities')])  # E-pixels x sources
+            [x[selection] for x in (Fluorescence.EField & key).fetch('emit_probabilities')])  # E-pixels x sources
         emission = illumination @ emission  # photons per frame
 
         detection = detector_efficiency * np.stack(
-            [x[selection] for x in (Detection.DPixel & key).fetch('detect_probabilities')])  # D-pixels x sources
+            [x[selection] for x in (Detection.DField & key).fetch('detect_probabilities')])  # D-pixels x sources
 
         # construct the mixing matrix mix: nchannels x ncells
         # mix = number of photons from neuron per frame at full fluorescence

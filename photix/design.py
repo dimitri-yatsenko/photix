@@ -5,7 +5,7 @@ import itertools
 import json
 import tqdm
 
-schema = dj.schema('photixx')
+schema = dj.schema('photixxx')
 
 
 @schema
@@ -133,7 +133,74 @@ class Design(dj.Lookup):
             epixel_azimuths="22.5:4600:135",
             dpixel_depths="15:1001:30,1",
             dpixel_azimuths="270:4600:135",
-            field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}')]
+            field_sims='{"d": 8, "e": [40, 41, 42, 43, 44, 45, 46, 47, 48]}'),
+        dict(
+            design=211,
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=150,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 18, "e": [140, 141, 142, 143, 144, 145, 146, 147, 148]}'),
+        dict(
+            design=215,
+            design_description="",
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=200,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 18, "e": [140, 141, 142, 143, 144, 145, 146, 147, 148]}'),
+
+        dict(
+            design=304,
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=200,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 14, "e": [320, 321, 322, 323, 324, 325, 326, 327, 328]}'),
+
+        dict(
+            design=314,
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=150,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 14, "e": [320, 321, 322, 323, 324, 325, 326, 327, 328]}'),
+
+        dict(
+            design=306,
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=200,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 14, "e": [330, 331, 332, 333, 334, 335, 336, 337, 338]}'),
+
+        dict(
+            design=316,
+            lattice='hex',
+            lattice_rows=5,
+            lattice_pitch=150,
+            epixel_depths="0:1001:30,1",
+            epixel_azimuths="22.5:4600:135",
+            dpixel_depths="15:1001:30,1",
+            dpixel_azimuths="270:4600:135",
+            field_sims='{"d": 14, "e": [330, 331, 332, 333, 334, 335, 336, 337, 338]}'),
+
+    ]
 
     @staticmethod
     def make_lattice(lattice_type, nrows):
@@ -180,14 +247,14 @@ class Geometry(dj.Computed):
     class EField(dj.Part):
         definition = """
         -> master.EPixel
-        -> fields.EField
+        -> fields.ESim
         """
 
     class DField(dj.Part):
         definition = """
         -> master.DPixel
         ---
-        -> fields.DField
+        -> fields.DSim
         """
 
     def make(self, key):
@@ -198,9 +265,9 @@ class Geometry(dj.Computed):
         field_sims = json.loads(design['field_sims'])
         esims = field_sims['e']
         dsim = field_sims['d']
-        assert fields.DField & {'dsim': dsim}
+        assert {'dsim': dsim} in fields.DSim(), f"DSim {dsim} not found"
         try:
-            err = next(esim for esim in esims if {'esim': esim} not in (fields.EField & {'esim': esim}))
+            err = next(esim for esim in esims if {'esim': esim} not in fields.ESim())
             raise ValueError(err)
         except StopIteration:
             pass

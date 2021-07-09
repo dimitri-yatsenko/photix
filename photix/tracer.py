@@ -172,5 +172,5 @@ class SpaceTracer:
         axis.axis(False)
         scale_bar = ScaleBar(self.pitch * 1e-6)
         axis.add_artist(scale_bar)
-        title = f"{title}\n{self.total_count / 1e6:0.2f} million simulated photons"
+        title = f"{title}\n{self.total_count / 1e6:0.2f} mil photons"
         axis.set_title(title)

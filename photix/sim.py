@@ -3,7 +3,7 @@ from . import design
 from .design import *
 from .fields import *
 
-schema = dj.schema('photixx')
+schema = dj.schema('photixxx')
 
 
 @schema
@@ -57,25 +57,26 @@ class Fluorescence(dj.Computed):
     -> Tissue
     """
 
-    class EPixel(dj.Part):
+    class EField(dj.Part):
         definition = """
         # Fluorescence produced by cells per Joule of illumination
         -> master
         -> Geometry.EField
         ---
+        nphotons : int   # number of simulated photons for the volume
         emit_probabilities  : longblob   # photons emitted from cells per joule of illumination
         mean_probability : float  # mean probability per cell
         """
 
     def make(self, key):
-
         neuron_cross_section = 0.1  # um^2
         points = (Tissue & key).fetch1('points')
         self.insert1(key)
-        for esim_key in (EField() & (Geometry.EField & key)).fetch("KEY"):
-            volume, pitch, *dims = (ESim * EField & esim_key).fetch1(
-                'volume', 'pitch', 'volume_dimx', 'volume_dimy', 'volume_dimz')
+        for esim_key in (ESim() & (Geometry.EField & key)).fetch("KEY"):
+            pitch, *dims = (ESim & esim_key).fetch1(
+                'pitch', 'volume_dimx', 'volume_dimy', 'volume_dimz')
             dims = np.array(dims)
+            space = (ESim & esim_key).make_volume(hops=100_000)
             for k in tqdm.tqdm((Geometry.EField & key & esim_key).fetch('KEY')):
                 # cell positions in volume coordinates
                 e_xyz, basis_z = (Geometry.EPixel & k).fetch1('e_loc', 'e_norm')
@@ -86,12 +87,13 @@ class Fluorescence(dj.Computed):
                 vxyz = np.int16(np.round((points - e_xyz) @ basis / pitch + dims / 2))
                 # probabilities
                 v = neuron_cross_section * np.array([
-                    volume[q[0], q[1], q[2]] if
+                    space.volume[q[0], q[1], q[2]] if
                     0 <= q[0] < dims[0] and
                     0 <= q[1] < dims[1] and
                     0 <= q[2] < dims[2] else 0 for q in vxyz])
-                self.EPixel().insert1(
+                self.EField().insert1(
                     dict(k, **esim_key,
+                         nphotons=space.total_count,
                          emit_probabilities=np.float32(v),
                          mean_probability=v.mean()))
 
@@ -102,12 +104,13 @@ class Detection(dj.Computed):
     -> Tissue
     """
 
-    class DPixel(dj.Part):
+    class DField(dj.Part):
         definition = """
         # Fraction of photons detected from each cell per detector
         -> master
         -> Geometry.DField
         ---
+        nphotons : int   # number of simulated photons for the volume
         detect_probabilities  : longblob   # fraction of photons detected from each neuron
         mean_probability : float  # mean probability of detection across all neurons
         """
@@ -116,11 +119,9 @@ class Detection(dj.Computed):
         points = (Tissue & key).fetch1('points')
         self.insert1(key)
         for dsim_key in (DSim & (Geometry.DField & key)).fetch("KEY"):
-            volume, pitch, *dims = (DSim * DField & dsim_key).fetch1(
-                'volume', 'pitch', 'volume_dimx', 'volume_dimy', 'volume_dimz')
-            # just in case, normalize to 0.5. Max detection should already be approximately 0.5.
-            # Remove normalization after additional sim verifications
-            volume = 0.5 * volume / volume.max()
+            pitch, *dims = (DSim & dsim_key).fetch1(
+                'pitch', 'volume_dimx', 'volume_dimy', 'volume_dimz')
+            space = (DSim & dsim_key).make_volume(hops=100_000)
             dims = np.array(dims)
             for k in tqdm.tqdm((Geometry.DField & key & dsim_key).fetch('KEY')):
                 # cell positions in volume coordinates
@@ -132,9 +133,11 @@ class Detection(dj.Computed):
                 vxyz = np.int16(np.round((points - d_xyz) @ basis / pitch + dims / 2))
                 # sample DSim volume
                 v = np.array([
-                    volume[q[0], q[1], q[2]] if
+                    space.volume[q[0], q[1], q[2]] if
                     0 <= q[0] < dims[0] and
                     0 <= q[1] < dims[1] and
                     0 <= q[2] < dims[2] else 0 for q in vxyz])
-                self.DPixel().insert1(
-                    dict(k, detect_probabilities=np.float32(v), mean_probability=v.sum()))
+                self.DField().insert1(
+                    dict(k, nphotons=space.total_count,
+                         detect_probabilities=np.float32(v),
+                         mean_probability=v.mean()))
